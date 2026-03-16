@@ -1,6 +1,8 @@
 package models
 
 import (
+	"encoding/json"
+
 	"github.com/golang/geo/r3"
 	"github.com/markus-wa/demoinfocs-golang/v5/pkg/demoinfocs/common"
 )
@@ -38,7 +40,26 @@ type PlayerTick struct {
 	Money int
 }
 
+func (p PlayerTick) MarshalJSON() ([]byte, error) {
+    return json.Marshal([]any{
+        p.UserID,
+		p.Team,
+		[]any{p.Position.X, p.Position.Y, p.Position.Z},
+		p.ViewDirectionX,
+        p.Hp,
+		p.Armor,
+		p.Money,
+    })
+}
+
 type Tick struct {
 	Tick int
 	Players []PlayerTick
+}
+
+func (t Tick) MarshalJSON() ([]byte, error) {
+    return json.Marshal([]any{
+		t.Tick,
+		t.Players,
+    })
 }
