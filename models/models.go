@@ -9,6 +9,17 @@ type Game struct {
 	Map string
 	TickRate float64
 	Players []Player
+	Rounds []Round
+	Ticks []Tick
+}
+
+type Round struct {
+	Round int
+	TScore int
+	CTScore int
+	Winner common.Team 
+	StartTick int
+	EndTick int
 }
 
 type Player struct {
@@ -23,16 +34,8 @@ type PlayerTick struct {
 	Position r3.Vector
 	ViewDirectionX float32
 	Hp int
-	Armot int
+	Armor int
 	Money int
-}
-
-type Round struct {
-	TScore int
-	CTScore int
-	Winner common.Team 
-	StartTick int
-	EndTick int
 }
 
 type Tick struct {
