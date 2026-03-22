@@ -2,9 +2,16 @@ import { useMutation } from "@tanstack/react-query";
 import type { Game } from "../models";
 import { parseDemo } from "../api/api";
 
-export function UploadDemo() {
-  const mutation = useMutation<Game, Error, File>({
+type UploadDemoProps = {
+  setGame: (game: Game) => void;
+};
+
+export function UploadDemo({ setGame }: UploadDemoProps) {
+  const mutation = useMutation({
     mutationFn: parseDemo,
+    onSuccess: (data) => {
+      setGame(data);
+    },
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,9 +28,7 @@ export function UploadDemo() {
       {mutation.isPending && <p>Uploading...</p>}
       {mutation.isError && <p>Error: {mutation.error.message}</p>}
       {mutation.isSuccess && (
-        <>
-          <p>Loaded demo with {mutation.data.ticks.length} ticks</p>
-        </>
+        <p>Loaded demo with {mutation.data.ticks.length} ticks</p>
       )}
     </div>
   );
