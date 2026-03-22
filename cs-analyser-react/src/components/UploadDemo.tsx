@@ -23,7 +23,6 @@ export function UploadDemo() {
       {mutation.isSuccess && (
         <>
           <p>Loaded demo with {mutation.data.ticks.length} ticks</p>
-          <p>tick {mutation.data.ticks[10]}</p>
         </>
       )}
     </div>
