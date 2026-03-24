@@ -10,7 +10,6 @@ export function worldToRadar(
   x: number,
   y: number,
   meta: RadarMeta,
-  canvasSize: { width: number; height: number },
 ) {
   const wx = x + meta.offset.x;
   const wy = y + meta.offset.y;
@@ -20,6 +19,6 @@ export function worldToRadar(
 
   return {
     x: px,
-    y: canvasSize.height - py,
+    y: 1024 - py,
   };
 }

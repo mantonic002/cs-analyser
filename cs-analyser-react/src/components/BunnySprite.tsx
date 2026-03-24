@@ -30,8 +30,8 @@ export function BunnySprite() {
       onPointerOut={() => setIsHover(false)}
       scale={isActive ? 1 : 1.5}
       texture={texture}
-      x={100}
-      y={100}
+      x={0}
+      y={0}
     />
   );
 }

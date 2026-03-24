@@ -16,18 +16,10 @@ interface Props {
 }
 
 function PixiApp({ game, tickIndex }: Props) {
-  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize);
 
   const meta = useRadarMeta(game?.map ?? null);
-console.log(meta)
-  const updateCanvasSize = useCallback(() => {
-    setCanvasSize(calculateCanvasSize());
-  }, []);
+  console.log(meta);
 
-  useEffect(() => {
-    window.addEventListener("resize", updateCanvasSize);
-    return () => window.removeEventListener("resize", updateCanvasSize);
-  }, [updateCanvasSize]);
 
   if (!game || !meta) return null;
 
@@ -36,7 +28,7 @@ console.log(meta)
 
   return (
     <Application autoStart sharedTicker resizeTo={window}>
-      <Level canvasSize={canvasSize} />
+      <Level />
 
       {players.map((p) => {
         const userID = p[0];
@@ -44,7 +36,7 @@ console.log(meta)
         const pos = p[2];
         const hp = p[4];
 
-        const radar = worldToRadar(pos[0], pos[1], meta, canvasSize);
+        const radar = worldToRadar(pos[0], pos[1], meta);
 
         return (
           <Player
