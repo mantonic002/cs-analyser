@@ -11,9 +11,12 @@ function App() {
   useEffect(() => {
     if (!game || !isPlaying) return;
 
-    const interval = setInterval(() => {
-      setTickIndex((prev) => Math.min(prev + 1, game.ticks.length - 1));
-    }, 1000 / 32);
+    const interval = setInterval(
+      () => {
+        setTickIndex((prev) => Math.min(prev + 1, game.ticks.length - 1));
+      },
+      1000 / 64 * 4,
+    );
 
     return () => clearInterval(interval);
   }, [game, isPlaying]);
