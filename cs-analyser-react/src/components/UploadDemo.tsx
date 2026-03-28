@@ -1,35 +1,46 @@
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import type { Game } from "../models";
-import { parseDemo } from "../api/api";
 
 type UploadDemoProps = {
   setGame: (game: Game) => void;
 };
 
 export function UploadDemo({ setGame }: UploadDemoProps) {
-  const mutation = useMutation({
-    mutationFn: parseDemo,
-    onSuccess: (data) => {
-      setGame(data);
-    },
-  });
+  const [loading, setLoading] = useState(false);
+  const [parseTime, setParseTime] = useState<number | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!file) return;
 
-    mutation.mutate(file);
+    setLoading(true);
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      if (!reader.result) return;
+
+      const buffer = reader.result as ArrayBuffer;
+      const bytes = new Uint8Array(buffer);
+
+      const start = performance.now();
+
+      const json = window.parseDemoFile(bytes);
+      const game = JSON.parse(json);
+      setGame(game);
+
+      const end = performance.now();
+      setParseTime(end - start);
+
+      setLoading(false);
+    };
+    reader.readAsArrayBuffer(file);
   };
 
   return (
     <div>
       <input type="file" accept=".dem" onChange={handleFileChange} />
-
-      {mutation.isPending && <p>Uploading...</p>}
-      {mutation.isError && <p>Error: {mutation.error.message}</p>}
-      {mutation.isSuccess && (
-        <p>Loaded demo with {mutation.data.ticks.length} ticks</p>
-      )}
+      {loading && <p>Uploading…</p>}
+      {parseTime !== null && <p>Parsed in {parseTime.toFixed(2)} ms</p>}
     </div>
   );
 }
