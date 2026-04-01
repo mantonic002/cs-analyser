@@ -1,5 +1,5 @@
-import './wasm_exec.js';
-import './wasmTypes.d.ts';
+import "./../../public/wasm_exec.js";
+import "./wasmTypes.d.ts";
 import React, { useEffect, useState } from "react";
 
 async function loadWasm(): Promise<void> {
@@ -7,7 +7,7 @@ async function loadWasm(): Promise<void> {
 
   const result = await WebAssembly.instantiateStreaming(
     fetch("/main.wasm"),
-    goWasm.importObject
+    goWasm.importObject,
   );
 
   goWasm.run(result.instance);

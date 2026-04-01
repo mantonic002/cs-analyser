@@ -15,7 +15,7 @@ function App() {
       () => {
         setTickIndex((prev) => Math.min(prev + 1, game.ticks.length - 1));
       },
-      (1000 / 64) * 4,
+      (1000 / 64) * 12,
     );
 
     return () => clearInterval(interval);

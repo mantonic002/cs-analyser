@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"syscall/js"
-	"time"
 	"wasm/models"
 
 	"github.com/markus-wa/demoinfocs-golang/v5/pkg/demoinfocs"
@@ -15,7 +14,6 @@ import (
 )
 
 func parseDemoFile(this js.Value, args []js.Value) interface {}{
-	start := time.Now()
     jsBytes := args[0]
     byteSlice := make([]byte, jsBytes.Get("byteLength").Int())
     js.CopyBytesToGo(byteSlice, jsBytes)
@@ -25,6 +23,9 @@ func parseDemoFile(this js.Value, args []js.Value) interface {}{
 	defer p.Close()
 
 	game := models.Game{}
+	game.Players = make([]models.Player, 0, 10)
+	game.Rounds = make([]models.Round, 0, 30)
+	game.Ticks = make([]models.Tick, 0, 10_000)
 
 	game.TickRate = p.TickRate()
 
@@ -79,7 +80,7 @@ func parseDemoFile(this js.Value, args []js.Value) interface {}{
 		}
 		gs:= p.GameState()
 		tickI := gs.IngameTick()
-		if tickI % 4 != 0 {
+		if tickI % 12 != 0 {
 			continue
 		}
 
@@ -87,8 +88,11 @@ func parseDemoFile(this js.Value, args []js.Value) interface {}{
 			Tick: tickI,
 		}
 
-		for _, p := range gs.Participants().Playing() {
-			tick.Players = append(tick.Players, models.PlayerTick{
+		playing := gs.Participants().Playing()
+		tick.Players = make([]models.PlayerTick, len(playing))
+
+		for i, p := range playing {
+			tick.Players[i] = models.PlayerTick{
 				UserID: p.UserID,	
 				Team: p.Team,
 				Position: p.Position(),
@@ -96,13 +100,13 @@ func parseDemoFile(this js.Value, args []js.Value) interface {}{
 				Hp: p.Health(),
 				Armor: p.Armor(),
 				Money: p.Money(),
-			})
+			}
 		}
 		game.Ticks = append(game.Ticks, tick)
 	}
 
 	jsonBytes, _ := json.Marshal(game)
-	fmt.Println("Parsing took:", time.Since(start))
+
 	return js.ValueOf(string(jsonBytes))
 }
 
