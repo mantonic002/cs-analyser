@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import type { Team } from "../models";
 import type { Graphics } from "pixi.js";
+import { TEAM_COLORS, TEAMS } from "../constants/gameUi";
 
 function Player({
   x,
@@ -16,7 +17,12 @@ function Player({
   team: Team;
   hp: number;
 }) {
-  const color = team === 2 ? 0xff4444 : team === 3 ? 0x4444ff : 0xffffff;
+  const color =
+    team === TEAMS.T
+      ? TEAM_COLORS.T
+      : team === TEAMS.CT
+        ? TEAM_COLORS.CT
+        : 0xffffff;
 
   const rad = (-viewDirectionX * Math.PI) / 180;
 

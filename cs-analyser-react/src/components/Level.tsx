@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Texture, Assets } from "pixi.js";
+import { RADAR_IMG_SIZE } from "../constants/gameUi";
 
 const maps = import.meta.glob("../assets/*/radar.png", {
   eager: true,
@@ -29,7 +30,7 @@ function Level({ map, ...props }: LevelProps) {
 
   if (!bgTex) return null;
 
-  return <pixiSprite texture={bgTex} width={1024} height={1024} {...props} />;
+  return <pixiSprite texture={bgTex} width={RADAR_IMG_SIZE} height={RADAR_IMG_SIZE} {...props} />;
 }
 
 export default Level;

@@ -2,6 +2,7 @@ import { UploadDemo } from "./components/UploadDemo";
 import PixiApp from "./components/PixiApp";
 import { useEffect, useState } from "react";
 import type { Game } from "./models";
+import { DEMO_FRAME_MS } from "./constants/game";
 
 function App() {
   const [game, setGame] = useState<Game | null>(null);
@@ -11,12 +12,9 @@ function App() {
   useEffect(() => {
     if (!game || !isPlaying) return;
 
-    const interval = setInterval(
-      () => {
-        setTickIndex((prev) => Math.min(prev + 1, game.ticks.length - 1));
-      },
-      (1000 / 64) * 12,
-    );
+    const interval = setInterval(() => {
+      setTickIndex((prev) => Math.min(prev + 1, game.ticks.length - 1));
+    }, DEMO_FRAME_MS);
 
     return () => clearInterval(interval);
   }, [game, isPlaying]);
