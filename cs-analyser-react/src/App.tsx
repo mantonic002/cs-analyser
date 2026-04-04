@@ -1,23 +1,11 @@
 import { UploadDemo } from "./components/UploadDemo";
 import PixiApp from "./components/PixiApp";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Game } from "./models";
-import { DEMO_FRAME_MS } from "./constants/game";
 
 function App() {
   const [game, setGame] = useState<Game | null>(null);
-  const [tickIndex, setTickIndex] = useState(20);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  useEffect(() => {
-    if (!game || !isPlaying) return;
-
-    const interval = setInterval(() => {
-      setTickIndex((prev) => Math.min(prev + 1, game.ticks.length - 1));
-    }, DEMO_FRAME_MS);
-
-    return () => clearInterval(interval);
-  }, [game, isPlaying]);
 
   return (
     <>
@@ -28,18 +16,16 @@ function App() {
           {isPlaying ? "Pause" : "Play"}
         </button>
 
-        <button onClick={() => setTickIndex(0)}>Reset</button>
+        <button>Reset</button>
 
         <input
           type="range"
           min={0}
           max={game?.ticks.length ? game.ticks.length - 1 : 0}
-          value={tickIndex}
-          onChange={(e) => setTickIndex(Number(e.target.value))}
         />
       </div>
 
-      <PixiApp game={game} tickIndex={tickIndex} />
+      <PixiApp game={game} />
     </>
   );
 }

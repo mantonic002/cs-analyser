@@ -1,7 +1,8 @@
 import { useCallback } from "react";
 import type { Team } from "../models";
-import type { Graphics } from "pixi.js";
+import { Graphics } from "pixi.js";
 import { TEAM_COLORS, TEAMS } from "../constants/gameUi";
+
 
 function Player({
   x,
